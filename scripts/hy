@@ -1,0 +1,12 @@
+#!/bin/sh
+
+cd ~
+
+export HYPRLAND_LOG_WLR=1
+
+export XCURSOR_THEME=Bibata-Modern-Classic
+
+export XCURSOR_SIZE=24
+
+
+exec Hyprland

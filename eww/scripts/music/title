@@ -1,0 +1,6 @@
+#!/bin/bash
+
+song=`playerctl --player=spotify metadata --format {{title}}`
+artist=`playerctl --player=spotify metadata --format {{artist}}`
+
+echo "$song  —  $artist"

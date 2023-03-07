@@ -1,0 +1,57 @@
+;; Vars
+
+(defpoll music_title :interval "2s"  "~/.config/eww/scripts/music/title")
+(defpoll music_song :interval "2s"  "~/.config/eww/scripts/music/song")
+(defpoll music_artist :interval "2s"  "~/.config/eww/scripts/music/artist")
+
+
+(defwidget bar []
+    (box :orientation "h"
+        (workspaces)
+        (music)
+        (date)
+    )
+)
+
+(defwidget workspaces []
+    (box :class "workspaces" :orientation "h" :space-evenly true :halign "start" :spacing 10
+        (button :class "btn" :onclick "hyprctl dispatch workspace 1" 1)
+        (button :class "btn" :onclick "hyprctl dispatch workspace 2" 2)
+        (button :class "btn" :onclick "hyprctl dispatch workspace 3" 3)
+        (button :class "btn" :onclick "hyprctl dispatch workspace 4" 4)
+        (button :class "btn" :onclick "hyprctl dispatch workspace 5" 5)
+        (button :class "btn" :onclick "hyprctl dispatch workspace 6" 6)
+        (button :class "btn" :onclick "hyprctl dispatch workspace 7" 7)
+        (button :class "btn" :onclick "hyprctl dispatch workspace 8" 8)
+        (button :class "btn" :onclick "hyprctl dispatch workspace 9" 9)
+    )
+)
+
+(defpoll date :interval "5s"
+    "date '+%H:%M | %a, %d %b'"
+)
+
+(defwidget date []
+    (box :class "date" :orientation "h" :space-evenly false :halign "end"
+        date
+    )
+)
+
+(defwidget music []
+    (box :orientation "h" :space-evenly true :halign "center" :valign "center"
+        (label :halign "center" :class "music" :wrap "true" :limit-width 70 :text music_title)
+    )
+)
+
+(defwindow bar
+    :monitor 0
+    :windowtype "dock"
+    :geometry (geometry :x "0%"
+                        :y "0%"
+                        :width "100%"
+                        :height "25px"
+                        :anchor "top center"
+    )
+    :reserve (struts :side "top" :distance "4%")
+    (bar)
+)

@@ -1,0 +1,44 @@
+// Vars
+$back: #161b24;
+$back-light: #202630;
+$fore: white;
+
+
+* {
+  all: unset;
+  font-family: 'Lexend', sans-serif;
+}
+
+.bar {
+  background-color: $back;
+  color: $fore;
+
+  font-size: 1.1em;//16px;
+
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+}
+
+.workspaces {
+  margin-left: 2em;
+
+  .btn {
+    padding: 0.2em 0.8em 0.2em 0.8em;
+    background-color: $back-light;
+    border-radius: 0.2em;
+
+    &:hover {
+      transition: 200ms linear background-color;
+
+      background-color: $fore;
+      color: $back;
+    }
+  }
+}
+
+.date {
+  margin-right: 2em;
+}
+
+.music {
+}

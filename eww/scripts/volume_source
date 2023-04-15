@@ -1,0 +1,43 @@
+#!/bin/bash
+
+get_volume() {
+    vol=`wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{print $2 * 100}'`
+    
+    echo $vol
+}
+
+is_muted() {
+    status=`wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{print $3}' | tr -d '[]'`
+
+    if [[ "$status" == "MUTED" ]]; then
+        echo 1
+    else
+        echo 0
+    fi
+}
+
+increase_volume() {
+    wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+
+}
+
+decrease_volume() {
+    wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-
+}
+
+toggle_mute() {
+    wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+}
+
+if [[ "$1" == "--get" ]]; then
+    get_volume
+elif [[ "$1" == "--muted" ]]; then
+    is_muted
+elif [[ "$1" == "--increase" ]]; then
+    increase_volume
+elif [[ "$1" == "--decrease" ]]; then
+    decrease_volume
+elif [[ "$1" == "--toggle" ]]; then
+    toggle_mute
+else
+    get_volume
+fi

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+close_all_widgets() {
+    echo a
+}
+
+music() {
+    text=`eww windows | grep "^*" | grep "music_window"`
+
+    if [[ -z "$text" ]]; then
+        close_all_widgets
+        eww -c $HOME/.config/eww open music_window
+    else
+        eww -c $HOME/.config/eww close music_window
+    fi
+}
+
+if [[ "$1" = "--music" ]]; then
+    music
+fi

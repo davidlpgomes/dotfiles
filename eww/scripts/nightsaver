@@ -1,0 +1,47 @@
+#!/bin/bash
+
+STD_t="4000"
+STD_T="4001"
+EXTREME_LOW="3000"
+EXTREME_HIGH="6500"
+
+kill_process() {
+    pgrep wlsunset | xargs kill 2&> /dev/null
+}
+
+is_on() {
+    if [[ -z "$(pgrep wlsunset)" ]]; then
+        echo 0
+    else
+        echo 1
+    fi
+}
+
+toggle() {
+    on="$(is_on)"
+
+    if [[ "$on" == 1 ]]; then
+        kill_process
+    else
+        wlsunset -T $STD_T -t $STD_t &
+    fi
+}
+
+if [[ "$1" == "--kill" ]]; then
+    kill_process
+elif [[ "$1" == "--on" ]]; then
+    is_on
+elif [[ "$1" == "--toggle" ]]; then
+    toggle
+elif [[ -z "$1" || "$1" == "--setpercentage" ]]; then
+    kill_process
+    if [[ -z "$2" ]]; then
+        wlsunset -T $STD_T -t $STD_t &
+    else
+        coefficient=`echo $EXTREME_LOW $EXTREME_HIGH | awk '{print ($1 - $2) / 100}'`
+        temp=`echo $coefficient $2 $EXTREME_HIGH | awk '{print $1 * $2 + $3}'`
+        Temp=`echo $temp | awk '{print $1 + 1}'`
+
+        wlsunset -T $Temp -t $temp &
+    fi
+fi

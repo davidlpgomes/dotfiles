@@ -1,5 +1,0 @@
-#!/bin/bash
-
-artist=`playerctl --player=spotify metadata --format {{artist}}`
-
-echo "$artist"

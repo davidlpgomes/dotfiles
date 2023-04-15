@@ -1,57 +1,332 @@
 ;; Vars
+(defvar music_reveal false)
+(defvar nightsaver_reveal false)
+(defvar volume_sink_reveal false)
+(defvar volume_source_reveal false)
 
-(defpoll music_title :interval "2s"  "~/.config/eww/scripts/music/title")
-(defpoll music_song :interval "2s"  "~/.config/eww/scripts/music/song")
-(defpoll music_artist :interval "2s"  "~/.config/eww/scripts/music/artist")
+(defpoll date :interval "5s" "date '+%H:%M | %a, %d %b'")
+
+(defpoll playing   :interval "500ms" "./scripts/music --playing")
+(defpoll music     :interval "2s" "./scripts/music")
+(defpoll artist    :interval "2s" "./scripts/music --artist")
+(defpoll album     :interval "2s" "./scripts/music --album")
+(defpoll music_pos :interval "1s" "./scripts/music --pospercentage")
+(defpoll music_art :interval "2s" "./scripts/music --cover")
+
+(defpoll nightsaver_on :interval "300ms" "./scripts/nightsaver --on")
+
+(defpoll volume_sink   :interval "3s" "./scripts/volume_sink")
+(defpoll volume_source :interval "3s" "./scripts/volume_source")
+
+(defpoll memory :interval "5s" "./scripts/memory")
+(defpoll cpu    :interval "3s" "./scripts/cpu")
+
+(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
 
 
-(defwidget bar []
-    (box :orientation "h"
+(defwidget workspaces []
+    (box :class "workspaces" :space-evenly true
+      (label :text "${workspaces}${current_workspace}" :visible false)
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (box :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
+            (label :text "${workspace.id}")
+          )
+        )
+      )
+    )
+)
+
+
+(defwidget music []
+    (eventbox
+        :onhover "${EWW_CMD} update music_reveal=true"
+        :onhoverlost "${EWW_CMD} update music_reveal=false"
+    (box
+        :class "music"
+        :orientation "h"
+        :space-evenly false
+        :halign "center"
+            :valign "center"
+        :vexpand false
+        :hexpand false
+        (image :class "cover" :path music_art :image-width 30 :image-height 30)
+        (button
+            :class "music"
+            :halign "center"
+            :wrap "true"
+            :limit-width 70
+            :onclick "scripts/pop --music"
+            music
+        )
+    )
+    )
+)
+
+(defwidget music_widget []
+    (box
+        :class "music-widget"
+        :orientation "h"
+        :space-evenly false
+        :vexpand false
+        :hexpand false
+        (image
+            :class "cover"
+            :path music_art
+            :image-width 130
+            :image-height 130
+        )
+        (box
+            :orientation "v"
+            :spacing 20
+            :space-evenly false
+            :vexpand false
+            :hexpand false
+            (label :class "music" :halign "center" :wrap true :text music)
+            (label :class "album" :halign "center" :wrap true :text album)
+            (label :class "artist" :halign "center" :wrap true :text artist)
+            (box
+                :orientation "h"
+                :spacing 15
+                :halign "center"
+                :space-evenly false
+                :vexpand false
+                :hexpand false
+                (button
+                    :class "previous"
+                    :onclick "scripts/music --previous"
+                    "⏮︎ "
+                )
+                (button
+                    :class {playing == 1 ? 'pause' : 'play'}
+                    :onclick "scripts/music --toggle"
+                    {playing == 1 ? '' : '奈'}
+                )
+                (button
+                    :class "next"
+                    :onclick "scripts/music --next"
+                    "⏭︎"
+                )
+            )
+            (box
+                :class "bar"
+                :spacing 15
+                :space-evenly false
+                :halign "center"
+                :vexpand false
+                :hexpand false
+                (scale
+                    :onchange "scripts/music --setposition {}"
+                    :min 0
+                    :max 100
+                    :value music_pos
+                )
+            )
+        )
+    )
+)
+
+(defwidget nightsaver []
+    (eventbox
+        :onhover {nightsaver_on == 1 ? "${EWW_CMD} update nightsaver_reveal=true" : ""}
+        :onhoverlost "${EWW_CMD} update nightsaver_reveal=false"
+        (box
+            :class "nightsaver"
+            :space-evenly false
+            :orientation "h"
+            :halign "fill"
+            :hexpand false
+            (button
+                :class {nightsaver_on == 1 ? "nightsaver-on" : "nightsaver-off"}
+                :onclick "scripts/nightsaver --toggle"
+                "👁"
+            )
+            (revealer
+                :transition "slideleft"
+                :reveal nightsaver_reveal
+                :duration "350ms"
+                (scale
+                    :value 100
+                    :orientation "h"
+                    :max 100
+                    :min 0
+                    :onchange "./scripts/nightsaver --setpercentage {}"
+                )
+            )
+        )
+    )
+)
+
+(defwidget volume_sink []
+    (eventbox
+        :onhover "${EWW_CMD} update volume_sink_reveal=true"
+        :onhoverlost "${EWW_CMD} update volume_sink_reveal=false"
+        (box
+            :class "volume-sink"
+            :space-evenly false
+            :orientation "h"
+            :halign "fill"
+            :hexpand false
+            (button
+                :class "volume-sink-icon"
+                :onclick "scripts/volume_sink --toggle"
+                "墳"
+            )
+            (revealer
+                :transition "slideleft"
+                :reveal volume_sink_reveal
+                :duration "350ms"
+                (scale
+                    :value volume_sink
+                    :orientation "h"
+                    :tooltip "${volume_sink}%"
+                    :max 100
+                    :min 0
+                    :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%"
+                )
+            )
+        )
+    )
+)
+
+
+(defwidget volume_source []
+    (eventbox
+        :onhover "${EWW_CMD} update volume_source_reveal=true"
+        :onhoverlost "${EWW_CMD} update volume_source_reveal=false"
+        (box
+            :class "volume-source"
+            :space-evenly false
+            :orientation "h"
+            :halign "fill"
+            :hexpand false
+            (button
+                :class "volume-source-icon"
+                :onclick "scripts/volume_source --toggle"
+                "🎙"
+            )
+            (revealer
+                :transition "slideleft"
+                :reveal volume_source_reveal
+                :duration "350ms"
+                (scale
+                    :value volume_source
+                    :orientation "h"
+                    :tooltip "${volume_source}%"
+                    :max 100
+                    :min 0
+                    :onchange "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ {}%"
+                )
+            )
+        )
+    )
+)
+
+(defwidget volume []
+    (box :class "volume" :space-evenly false :orientation "h" :hexpand false
+        (volume_sink)
+        (volume_source)
+    )
+)
+
+(defwidget cpu []
+    (box :class "cpu" :vexpand "false" :hexpand "false"
+        (circular-progress :class "cpu-circ" :value cpu :start-at 75 :thickness 6
+            (button
+                :class "icon-cpu"
+                :limit-width 2
+                :tooltip "CPU usage: ${cpu}%"
+                :show_truncated false
+                :wrap false
+                    "C"
+            )
+        )
+    )
+)
+
+(defwidget memory []
+    (box :class "memory" :vexpand "false" :hexpand "false"
+        (circular-progress :class "memory-circ" :value memory :start-at 75 :thickness 6
+            (button
+                :class "icon-mem"
+                :limit-width 2
+                :tooltip "RAM usage: ${memory}%"
+                :show_truncated false
+                :wrap false
+                    "M"
+            )
+        )
+    )
+)
+
+(defwidget systemstats []
+    (box :class "systemstats"
+        (cpu)
+        (memory)
+    )
+)
+
+
+(defwidget date []
+    (label :class "date" :text date)
+)
+
+(defwidget left []
+    (box :class "left" :orientation "h" :space-evenly false :halign "start"
         (workspaces)
+    )
+)
+
+(defwidget center []
+    (box :class "center" :orientation "h" :space-evenly false :halign "center"
         (music)
+    )
+)
+
+(defwidget right []
+    (box :class "right" :orientation "h" :space-evenly false :halign "end"
+        (nightsaver)
+        (volume)
+        (systemstats)
         (date)
     )
 )
 
-(defwidget workspaces []
-    (box :class "workspaces" :orientation "h" :space-evenly true :halign "start" :spacing 10
-        (button :class "btn" :onclick "hyprctl dispatch workspace 1" 1)
-        (button :class "btn" :onclick "hyprctl dispatch workspace 2" 2)
-        (button :class "btn" :onclick "hyprctl dispatch workspace 3" 3)
-        (button :class "btn" :onclick "hyprctl dispatch workspace 4" 4)
-        (button :class "btn" :onclick "hyprctl dispatch workspace 5" 5)
-        (button :class "btn" :onclick "hyprctl dispatch workspace 6" 6)
-        (button :class "btn" :onclick "hyprctl dispatch workspace 7" 7)
-        (button :class "btn" :onclick "hyprctl dispatch workspace 8" 8)
-        (button :class "btn" :onclick "hyprctl dispatch workspace 9" 9)
-    )
-)
 
-(defpoll date :interval "5s"
-    "date '+%H:%M | %a, %d %b'"
-)
-
-(defwidget date []
-    (box :class "date" :orientation "h" :space-evenly false :halign "end"
-        date
-    )
-)
-
-(defwidget music []
-    (box :orientation "h" :space-evenly true :halign "center" :valign "center"
-        (label :halign "center" :class "music" :wrap "true" :limit-width 70 :text music_title)
+(defwidget bar []
+    (centerbox :class "bar" :orientation "h"
+        (left)
+        (center)
+        (right)
     )
 )
 
 (defwindow bar
     :monitor 0
+    :exclusive false
     :windowtype "dock"
     :geometry (geometry :x "0%"
                         :y "0%"
                         :width "100%"
-                        :height "25px"
+                        :height "30px"
                         :anchor "top center"
-    )
+              )
+    :stacking "fg"
     :reserve (struts :side "top" :distance "4%")
     (bar)
+)
+
+(defwindow music_window
+    :monitor 0
+    :stacking "fg"
+    :focusable false
+    :screen 1
+    :geometry (geometry :x "0%"
+                        :y "5%"
+                        :width 500
+                        :height 200
+                        :anchor "top center"
+              )
+    (music_widget)
 )

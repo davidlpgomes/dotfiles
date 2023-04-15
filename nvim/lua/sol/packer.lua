@@ -9,14 +9,21 @@ return require('packer').startup(function(use)
         requires = { {'nvim-lua/plenary.nvim'} }
     }
 
-    use 'tjdevries/colorbuddy.nvim'
-    use 'thewinger/panda.nvim'
+    use ('AhmedAbdulrahman/aylin.vim')
+
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+    }
 
     use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
     use('nvim-treesitter/playground')
     use('mbbill/undotree')
     use('tpope/vim-fugitive')
     use('lervag/vimtex')
+
+    use('nvim-tree/nvim-tree.lua')
+    use('nvim-tree/nvim-web-devicons')
 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -40,4 +47,5 @@ return require('packer').startup(function(use)
             {'rafamadriz/friendly-snippets'}, -- Optional
         }
     }
+
 end)

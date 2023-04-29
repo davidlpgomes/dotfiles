@@ -48,4 +48,9 @@ return require('packer').startup(function(use)
         }
     }
 
+    use('hkupty/iron.nvim')
+
+    -- Python packages
+    use('goerz/jupytext.vim')
+
 end)

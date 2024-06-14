@@ -11,7 +11,7 @@ $blue: #9FD4FF;
 
 * {
     all: unset;
-    font-family: Lexend, sans-serif;
+    font-family: Lexend, FantasqueSansMNerdFont, sans-serif;
 }
 
 .bar {
@@ -135,8 +135,8 @@ tooltip.label {
 
             .volume-sink-icon {
                 color: $pink;
-                font-size: 28;
-                margin: 0px 10px 0px 10px;
+                font-size: 24;
+                margin: 0px 20px 0px 10px;
             }
 
             slider {
@@ -257,12 +257,11 @@ tooltip.label {
     }
 
     .play, .pause {
-        font-size: 40px;
+        font-size: 24px;
         margin-right: 5px;
     }
 
     .bar {
-
         slider {
             all: unset;
         }

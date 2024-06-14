@@ -67,16 +67,16 @@ get_cover() {
 }
 
 toggle_music() {
-    playerctl play-pause
+    playerctl --player=spotify play-pause
 }
 
 next_music() {
-    playerctl next
+    playerctl --player=spotify next
     get_cover
 }
 
 previous_music() {
-    playerctl previous
+    playerctl --player=spotify previous
     get_cover
 }
 

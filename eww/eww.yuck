@@ -15,8 +15,11 @@
 
 (defpoll nightsaver_on :interval "300ms" "./scripts/nightsaver --on")
 
-(defpoll volume_sink   :interval "3s" "./scripts/volume_sink")
-(defpoll volume_source :interval "3s" "./scripts/volume_source")
+(defpoll volume_sink   :interval "1s" "./scripts/volume_sink")
+(defpoll volume_sink_muted :interval "1s" "./scripts/volume_sink --muted")
+
+(defpoll volume_source :interval "1s" "./scripts/volume_source")
+(defpoll volume_source_muted :interval "1s" "./scripts/volume_source --muted")
 
 (defpoll memory :interval "5s" "./scripts/memory")
 (defpoll cpu    :interval "3s" "./scripts/cpu")
@@ -96,17 +99,17 @@
                 (button
                     :class "previous"
                     :onclick "scripts/music --previous"
-                    "⏮︎ "
+                    ""
                 )
                 (button
                     :class {playing == 1 ? 'pause' : 'play'}
                     :onclick "scripts/music --toggle"
-                    {playing == 1 ? '' : '奈'}
+                    {playing == 1 ? "" : ""}
                 )
                 (button
                     :class "next"
                     :onclick "scripts/music --next"
-                    "⏭︎"
+                    ""
                 )
             )
             (box
@@ -171,7 +174,11 @@
             (button
                 :class "volume-sink-icon"
                 :onclick "scripts/volume_sink --toggle"
-                "墳"
+                {
+                    volume_sink_muted == 1 ? "" :
+                    volume_sink > 50 ? "" :
+                    volume_sink > 0 ? "" : ""
+                }
             )
             (revealer
                 :transition "slideleft"
@@ -204,7 +211,7 @@
             (button
                 :class "volume-source-icon"
                 :onclick "scripts/volume_source --toggle"
-                "🎙"
+                {volume_source_muted == 1 ? "" : ""}
             )
             (revealer
                 :transition "slideleft"
@@ -303,7 +310,7 @@
 )
 
 (defwindow bar
-    :monitor 0
+    :monitor 1
     :exclusive false
     :windowtype "dock"
     :geometry (geometry :x "0%"
@@ -318,10 +325,10 @@
 )
 
 (defwindow music_window
-    :monitor 0
+    :monitor 1
     :stacking "fg"
     :focusable false
-    :screen 1
+    :screen 0
     :geometry (geometry :x "0%"
                         :y "5%"
                         :width 500

@@ -30,6 +30,16 @@ return {
                 async = false,
                 timeout_ms = 1000,
             },
+            formatters = {
+                ['google-java-format'] = {
+                    prepend_args = { '--aosp' },
+                },
+                ['clang-format'] = {
+                    prepend_args = {
+                        '--style=file:/home/david/.config/nvim/format_styles/clang',
+                    },
+                },
+            },
         })
 
         vim.keymap.set({ 'n', 'v' }, '<leader>mp', function()

@@ -87,15 +87,6 @@ return {
                     },
                 })
             end,
-            ['clangd'] = function()
-                lspconfig['clangd'].setup({
-                    capabilities = capabilities,
-                    cmd = {
-                        'clangd',
-                        '--fallback-style=llvm',
-                    },
-                })
-            end,
         })
     end,
 }

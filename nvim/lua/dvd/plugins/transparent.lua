@@ -10,20 +10,10 @@ return {
                 'Directory',
                 'LineNr',
                 'SignColumn',
-                -- NvimTree
-                'NvimTreeNormal',
-                'NvimTreeNormalNC',
-                'NvimTreeFolderIcon',
-                'NvimTreeFolderName',
-                'NvimTreeOpenedFolderName',
-                'NvimTreeEmptyFolderName',
-                'NvimTreeIndentMarker',
-                'NvimTreeRootFolder',
-                'NvimTreeImageFile',
-                'NvimTreeSpecialFile',
-                'NvimTreeSymlink',
-                'NvimTreeSymlinkFolderName',
             },
         })
-    end
+
+        tp.clear_prefix('BufferLine')
+        tp.clear_prefix('NvimTree')
+    end,
 }

@@ -5,7 +5,7 @@ close_all_widgets() {
 }
 
 music() {
-    text=`eww windows | grep "^*" | grep "music_window"`
+    text=`eww active-windows | grep "music_window"`
 
     if [[ -z "$text" ]]; then
         close_all_widgets

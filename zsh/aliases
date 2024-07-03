@@ -3,7 +3,7 @@ alias g="git"
 alias gst="git status"
 alias gcm="git commit -m"
 
-alias p3="python3"
+alias py="python"
 alias yt="youtube-dl"
 alias mr="scrcpy -S"
 alias v="nvim"

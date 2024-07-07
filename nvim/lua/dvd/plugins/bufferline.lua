@@ -6,12 +6,11 @@ return {
         options = {
             mode = 'tabs',
             indicator = {
-                icon = '|',
-                style = 'underline',
+                style = 'none',
             },
             tab_size = 20,
             diagnostics = 'nvim_lsp',
-            separator_style = 'slant',
+            separator_style = 'thin',
             always_show_bufferline = false,
         },
     },

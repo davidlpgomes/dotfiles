@@ -30,7 +30,7 @@ opt.cursorline = true
 -- Undofile
 opt.swapfile = false
 opt.backup = false
-opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+opt.undodir = os.getenv('HOME') .. '/.vim/undodir'
 opt.undofile = true
 
 -- Backspace
@@ -45,10 +45,10 @@ opt.splitbelow = true
 
 -- Others
 opt.termguicolors = true
-opt.colorcolumn = "80"
+opt.colorcolumn = '80'
 
 opt.scrolloff = 8
-opt.signcolumn = "yes"
-opt.isfname:append("@-@")
+opt.signcolumn = 'yes'
+opt.isfname:append('@-@')
 
 opt.updatetime = 50

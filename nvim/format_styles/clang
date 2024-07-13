@@ -1,2 +1,4 @@
-BasedOnStyle: google
 IndentWidth: 4
+AccessModifierOffset: 0
+IndentAccessModifiers: true
+SpaceAfterCStyleCast: true

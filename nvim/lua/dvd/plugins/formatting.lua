@@ -37,6 +37,7 @@ return {
                 ['clang-format'] = {
                     prepend_args = {
                         '--style=file:/home/david/.config/nvim/format_styles/clang',
+                        '--fallback-style=google',
                     },
                 },
             },

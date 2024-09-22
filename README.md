@@ -1,5 +1,5 @@
 # dotfiles
-btw i use arch
+i use arch btw
 
 ## Details
 - **OS:** Arch Linux

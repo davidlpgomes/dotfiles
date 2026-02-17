@@ -1,4 +1,0 @@
-export PATH=$PATH:$HOME/scripts
-
-export EDITOR="nvim"
-export BROWSER="firefox"

@@ -1,0 +1,41 @@
+@import "colors.css";
+
+* {
+    font-family: "IBM Plex Sans";
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+}
+
+window#waybar {
+    background-color: shade(@base, 0.9);
+    border: 2px solid alpha(@crust, 0.3);
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+#clock,
+#battery,
+#custom-cpu,
+#custom-memory,
+#custom-gpu,
+#custom-disk,
+#temperature,
+#backlight,
+#network,
+#wireplumber,
+#image-album,
+#custom-media,
+#tray,
+#mode,
+#window,
+#custom-power,
+#workspaces {
+    margin: 0 20px;
+}
+
+#workspaces {
+    font-weight: bold;
+}

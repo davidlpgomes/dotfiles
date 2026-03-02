@@ -71,7 +71,7 @@ listview {
     background-color: transparent;
     margin: 12px 0 0;
     columns: 1;
-    lines: 5;
+    lines: 16;
 
     fixed-height: false;
 }

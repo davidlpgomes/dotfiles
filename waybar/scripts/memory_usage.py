@@ -86,4 +86,4 @@ def get_top_processes(meminfo):
 if __name__ == "__main__":
     usage, meminfo = get_mem_usage()
     tooltip = get_top_processes(meminfo)
-    print(json.dumps({"text": f"{usage}%", "tooltip": tooltip}))
+    print(json.dumps({"text": f"{usage}", "tooltip": tooltip}))

@@ -1,41 +1,44 @@
-@import "colors.css";
-
 * {
-    font-family: "IBM Plex Sans";
-    font-size: 20px;
-    font-weight: 500;
-    color: white;
+  font-family: "JetBrainsMono Nerd Font", "Inter", "IBM Plex Sans";
+  font-size: 14px;
+  font-weight: 500;
 }
 
 window#waybar {
-    background-color: shade(@base, 0.9);
-    border: 2px solid alpha(@crust, 0.3);
-}
-
-window#waybar.hidden {
-    opacity: 0.2;
+  background-color: transparent;
 }
 
 #clock,
-#battery,
-#custom-cpu,
-#custom-memory,
-#custom-gpu,
-#custom-disk,
-#temperature,
 #backlight,
-#network,
-#wireplumber,
-#image-album,
+#battery,
+#bluetooth,
+#custom-brightness,
+#custom-cpu,
+#custom-disk,
+#custom-gpu,
 #custom-media,
-#tray,
-#mode,
-#window,
+#custom-memory,
 #custom-power,
-#workspaces {
-    margin: 0 20px;
+#network,
+#privacy,
+#temperature,
+#tray,
+#wireplumber,
+#workspaces button {
+  background-color: #000;
+  border-radius: 10px;
+  color: white;
+  margin: 0rem 0.25rem;
+  margin-top: 0.25em;
+  padding: 0.25rem 0.8rem;
 }
 
-#workspaces {
-    font-weight: bold;
+#workspaces button.active {
+  color: black;
+  background-color: lightgray;
+}
+
+#workspaces button.hover {
+  color: black;
+  background-color: lightgrey;
 }

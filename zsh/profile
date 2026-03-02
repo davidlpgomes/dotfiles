@@ -1,0 +1,12 @@
+export PATH=$PATH:$HOME/scripts
+export PATH=$PATH:$HOME/.local/bin
+
+export PATH=$PATH:/opt/cuda/bin
+
+export EDITOR="nvim"
+export BROWSER="zen-browser"
+
+export XDG_CONFIG_HOME="/home/david/.config"
+
+# SSH
+export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket

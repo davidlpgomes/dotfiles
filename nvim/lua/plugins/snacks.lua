@@ -10,6 +10,6 @@ return {
             enabled = true,
             timeout = 3000,
         },
-        scroll = { enabled = true },
+        scroll = { enabled = false },
     },
 }

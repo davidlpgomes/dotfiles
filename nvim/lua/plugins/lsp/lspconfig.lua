@@ -3,6 +3,7 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
         { 'antosha417/nvim-lsp-file-operations', config = true },
+        { 'saghen/blink.cmp' },
     },
     config = function()
         local lspconfig = require('lspconfig')
@@ -55,11 +56,17 @@ return {
             end,
         })
 
-        local signs = { Error = ' ', Warn = ' ', Hint = '󰠠 ', Info = ' ' }
+        local severity = vim.diagnostic.severity
 
-        for type, icon in pairs(signs) do
-            local hl = 'DiagnosticSign' .. type
-            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
-        end
+        vim.diagnostic.config({
+            signs = {
+                text = {
+                    [severity.ERROR] = ' ',
+                    [severity.WARN] = ' ',
+                    [severity.HINT] = '󰠠 ',
+                    [severity.INFO] = ' ',
+                },
+            },
+        })
     end,
 }

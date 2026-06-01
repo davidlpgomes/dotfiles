@@ -2,20 +2,30 @@ configuration {
     modes: "window,run,drun";
     sorting-method: "normal";
     show-icons: true;
-    matching: "regex";
-    drun-match-fields: "name";
-    display-run: "Menu:";
-    display-drun: "Programs:";
-    display-window: "Windows:";
+    matching: "fuzzy";
+    drun-match-fields: "name,generic,exec,categories,keywords";
+    case-sensitive: false;
+    cycle: true;
+    terminal: "ghostty";
+    display-run: "Run";
+    display-drun: "Apps";
+    display-window: "Windows";
 }
 
-@theme "Monokai"
-
 * {
-    font: "IBM Plex Sans 16";
+    bg: #111111ee;
+    bg-alt: #191919;
+    bg-hover: #242424;
+    bg-selected: #343434;
+    border-color: #333333;
+    fg: #f5f5f5;
+    muted: #a1a1aa;
+    selected-fg: #ffffff;
+
+    font: "IBM Plex Sans 14";
 
     background-color: transparent;
-    text-color: white;
+    text-color: @fg;
 
     margin: 0px;
     padding: 0px;
@@ -24,65 +34,112 @@ configuration {
 
 window {
     location:       center;
-    width:          600;
+    width:          42em;
     y-offset:       -20;
-    border-radius:  24px;
+    border-radius:  20px;
 
     border: 1px;
-    border-color: black;
-    background-color: black;
+    border-color: @border-color;
+    background-color: @bg;
 }
 
 mainbox {
-    padding: 20px;
+    padding: 16px;
 }
 
 inputbar {
-    background-color: black;
-    border-color: black;
-    border-radius:  16px;
+    background-color: @bg-alt;
+    border-color: @border-color;
+    border-radius:  14px;
     border: 2px;
 
-    padding: 8px 16px;
+    padding: 6px 14px;
     spacing: 8px;
     children: [ prompt, entry ];
 }
 
 prompt {
-    text-color: #e6db74;
+    text-color: @muted;
+    background-color: transparent;
 }
 
 entry {
     placeholder: "Search";
+    placeholder-color: @muted;
+    background-color: transparent;
+    text-color: @fg;
+    border: 0px;
+    padding: 0px;
 }
 
 message {
-    margin: 12px 0 0;
-    border-radius: 16px;
-    background-color: black;
+    margin: 10px 0 0;
+    border-radius: 14px;
+    background-color: @bg-alt;
 }
 
 textbox {
-    padding: 8px 24px;
-    background-color: black;
+    padding: 6px 18px;
+    background-color: @bg-alt;
+    text-color: @fg;
 }
 
 listview {
     background-color: transparent;
-    margin: 12px 0 0;
+    margin: 10px 0 0;
     columns: 1;
-    lines: 16;
+    lines: 10;
 
     fixed-height: false;
 }
 
 element {
-    padding: 8px 16px;
+    padding: 6px 14px;
     spacing: 8px;
-    border-radius: 16px;
+    border-radius: 14px;
+    background-color: transparent;
+    text-color: @fg;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color: @fg;
+}
+
+element normal.active,
+element alternate.active,
+element selected.active {
+    background-color: @bg-hover;
+    text-color: @fg;
+}
+
+element normal.urgent,
+element alternate.urgent,
+element selected.urgent {
+    background-color: @bg-hover;
+    text-color: @fg;
+}
+
+element selected {
+    background-color: @bg-selected;
+    text-color: @selected-fg;
+}
+
+element selected element-text,
+element selected element-icon {
+    background-color: transparent;
+    text-color: @selected-fg;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
 }
 
 element-icon {
-    size: 1em;
+    size: 1.15em;
     vertical-align: 0.5;
+    background-color: transparent;
+    text-color: inherit;
 }

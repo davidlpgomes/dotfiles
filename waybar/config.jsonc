@@ -1,182 +1,173 @@
 {
-  "reload_style_on_change": true,
-  "layer": "top",
-  "position": "top",
-  "spacing": 0,
-  "height": 30,
-  "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["clock"],
-  "modules-right": [
-    "custom/media",
-    "wireplumber",
-    "wireplumber#source",
-    "bluetooth",
-    "custom/brightness",
-    "custom/cpu",
-    "custom/memory",
-    "custom/gpu",
-    "custom/disk",
-    "network",
-    "battery",
-    "tray",
-    "privacy",
-  ],
-  "hyprland/workspaces": {
-    "on-click": "activate",
-    "format": "{icon}",
-    "format-icons": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7",
-      "8": "8",
-      "9": "9",
-      "10": "0",
-    },
-  },
-  "clock": {
-    "format": "󰥔 {:%a, %d %b, %H:%M}",
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><big>{calendar}</big></tt>",
-    "on-click": "",
-  },
-  "custom/brightness": {
-    "format": "{icon} {percentage}%",
-    "tooltip-format": "{percentage}%",
-    "format-icons": ["🌑", "🌒", "🌓", "🌔", "🌕"],
-    "exec": "$HOME/.config/waybar/scripts/ddcutil.py",
-    "interval": "once",
-    "exec-on-event": "$HOME/.config/waybar/scripts/ddcutil.py",
-    "return-type": "json",
-    "on-scroll-up": "$HOME/.config/waybar/scripts/ddcutil.py --set +10",
-    "on-scroll-down": "$HOME/.config/waybar/scripts/ddcutil.py --set -10",
-    "on-click": "$HOME/.config/waybar/scripts/ddcutil.py --set 5",
-    "on-click-right": "$HOME/.config/waybar/scripts/ddcutil.py --set 100",
-  },
-  "custom/media": {
-    "format": "{icon} {text}",
-    "return-type": "json",
-    "max-length": 60,
-    "format-icons": {
-      "spotify": "",
-      "default": "🎜",
-    },
-    "escape": true,
-    "exec": "$HOME/.config/waybar/scripts/mediaplayer.py --player spotify 2> /dev/null",
-    "on-click": "playerctl --player=spotify play-pause",
-  },
-  "custom/cpu": {
-    "exec": "$HOME/.config/waybar/scripts/cpu_usage.sh",
-    "interval": 3,
-    "return-type": "json",
-    "format": "󰍛 {}%",
-    "on-click": "ghostty --title=terminal-float -e btop",
-  },
-  "custom/gpu": {
-    "exec": "$HOME/.config/waybar/scripts/gpu_usage.sh",
-    "interval": 3,
-    "return-type": "json",
-    "format": "󰢮 {}%",
-    "on-click": "ghostty --title=terminal-float -e watch -n 0.5 nvidia-smi",
-  },
-  "custom/memory": {
-    "exec": "$HOME/.config/waybar/scripts/memory_usage.py",
-    "interval": 5,
-    "return-type": "json",
-    "format": "  {}%",
-    "on-click": "ghostty --title=terminal-float -e btop",
-  },
-  "custom/disk": {
-    "interval": 30,
-    "format": " {}%",
-    "path": "/",
-    "exec": "$HOME/.config/waybar/scripts/disk_usage.sh",
-    "return-type": "json",
-    "on-click": "ghostty --title=terminal-float -e gdu /",
-    "on-click-right": "ghostty --title=terminal-float -e yazi ~",
-  },
-  "network": {
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "format": "{icon}",
-    "format-wifi": "{icon}",
-    "format-ethernet": "󰈀",
-    "format-disconnected": "󰤮",
-    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-    "tooltip-format-ethernet": "{ifname}\nIP: {ipaddr}\nGateway: {gwaddr}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-    "tooltip-format-disconnected": "Disconnected",
-    "interval": 3,
-    "spacing": 1,
-    "on-click": "",
-  },
-  "battery": {
-    "format": "{capacity}% {icon}",
-    "format-discharging": "{icon}",
-    "format-charging": "{icon}",
-    "format-plugged": "",
-    "format-icons": {
-      "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
-      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-    },
-    "format-full": "󰂅",
-    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
-    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
-    "interval": 5,
-    "states": {
-      "warning": 20,
-      "critical": 10,
-    },
-  },
-  "bluetooth": {
-    "format": "",
-    "format-disabled": "󰂲",
-    "format-connected": "󰂱 {num_connections}",
-    "format-no-controller": "",
-    "on-click": "ghostty --title=terminal-float -e bluetui",
-    "tooltip-format": "{controller_alias}\t{controller_address}",
-    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-  },
-  "wireplumber": {
-    "format": "{icon}  {volume}%",
-    "format-muted": " ",
-    "format-icons": {
-      "default": ["", "", ""],
-    },
-    "on-click": "ghostty --title=terminal-float -e wiremix --tab output",
-    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-    "max-volume": 100,
-    "scroll-step": 5,
-  },
-  "wireplumber#source": {
-    "node-type": "Audio/Source",
-    "format": "󰍬 {volume}%",
-    "format-muted": "󰍭",
-    "on-click": "ghostty --title=terminal-float -e wiremix --tab input",
-    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    "scroll-step": 5,
-  },
-  "tray": {
-    "icon-size": 15,
-    "spacing": 17,
-  },
-  "privacy": {
-    "icon-spacing": 12,
-    "icon-size": 18,
-    "transition-duration": 250,
-    "modules": [
-      {
-        "type": "screenshare",
-        "tooltip": true,
-        "tooltip-icon-size": 24,
-      },
-      {
-        "type": "audio-in",
-        "tooltip": true,
-        "tooltip-icon-size": 24,
-      },
+    "layer": "top",
+    "position": "top",
+    "spacing": 0,
+    "height": 30,
+    "modules-left": ["custom/media", "hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": [
+      "wireplumber",
+      "wireplumber#source",
+      "bluetooth",
+      "custom/brightness",
+      "custom/cpu",
+      "custom/memory",
+      "custom/gpu",
+      "custom/disk",
+      "network",
+      "battery",
+      "tray",
+      "privacy"
     ],
-    "ignore-monitor": true,
-  },
+    "hyprland/workspaces": {
+      "on-click": "activate",
+      "format": "{icon}",
+      "format-icons": {
+        "1": "1", "2": "2", "3": "3", "4": "4", "5": "5",
+        "6": "6", "7": "7", "8": "8", "9": "9", "10": "0"
+      }
+    },
+    "clock": {
+      "format": "{:%H:%M}",
+      // "format": "󰥔  {:%A, %d %b, %H:%M}",
+      "tooltip-format": "<big>{:%Y %B %d, %A}</big>\n\n<tt><big>{calendar}</big></tt>",
+      "on-click": ""
+    },
+    "custom/brightness": {
+      "format": "  {percentage}",
+      "tooltip-format": "Brightness at {percentage}%",
+      // "format-icons": ["🌑", "🌒", "🌓", "🌔", "🌕"],
+      "exec": "$HOME/.config/waybar/scripts/ddcutil.py",
+      "interval": "once",
+      "exec-on-event": "$HOME/.config/waybar/scripts/ddcutil.py",
+      "return-type": "json",
+      "on-scroll-up": "$HOME/.config/waybar/scripts/ddcutil.py --set +10",
+      "on-scroll-down": "$HOME/.config/waybar/scripts/ddcutil.py --set -10",
+      "on-click": "$HOME/.config/waybar/scripts/ddcutil.py --set 5",
+      "on-click-right": "$HOME/.config/waybar/scripts/ddcutil.py --set 100"
+    },
+    "custom/media": {
+      "format": "{icon}  {text}",
+      "return-type": "json",
+      "max-length": 60,
+      "format-icons": {
+        "spotify": "",
+        "default": "🎜"
+      },
+      "escape": true,
+      "exec": "$HOME/.config/waybar/scripts/mediaplayer.py --player spotify 2> /dev/null",
+      "on-click": "playerctl --player=spotify play-pause"
+    },
+    "custom/cpu": {
+      "exec": "$HOME/.config/waybar/scripts/cpu_usage.sh",
+      "interval": 3,
+      "return-type": "json",
+      "format": "󰍛  {}",
+      "on-click": "ghostty --title=terminal-float -e btop"
+    },
+    "custom/gpu": {
+      "exec": "$HOME/.config/waybar/scripts/gpu_usage.sh",
+      "interval": 3,
+      "return-type": "json",
+      "format": "󰢮  {}",
+      "on-click": "ghostty --title=terminal-float -e watch -n 0.5 nvidia-smi"
+    },
+    "custom/memory": {
+      "exec": "$HOME/.config/waybar/scripts/memory_usage.py",
+      "interval": 5,
+      "return-type": "json",
+      "format": "   {}",
+      "on-click": "ghostty --title=terminal-float -e btop"
+    },
+    "custom/disk": {
+      "interval": 30,
+      "format": "  {}",
+      "path": "/",
+      "exec": "$HOME/.config/waybar/scripts/disk_usage.sh",
+      "return-type": "json",
+      "on-click": "ghostty --title=terminal-float -e gdu /",
+      "on-click-right": "ghostty --title=terminal-float -e yazi ~"
+    },
+    "network": {
+      "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+      "format": "{icon}",
+      "format-wifi": "{icon}",
+      "format-ethernet": "󰈀",
+      "format-disconnected": "󰤮",
+      "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+      "tooltip-format-ethernet": "{ifname}\nIP: {ipaddr}\nGateway: {gwaddr}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+      "tooltip-format-disconnected": "Disconnected",
+      "interval": 3,
+      "spacing": 1,
+      "on-click": ""
+    },
+    "battery": {
+      "format": "{capacity} {icon}",
+      "format-discharging": "{icon}",
+      "format-charging": "{icon}",
+      "format-plugged": "",
+      "format-icons": {
+        "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+        "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+      },
+      "format-full": "󰂅",
+      "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
+      "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+      "interval": 5,
+      "states": {
+        "warning": 20,
+        "critical": 10
+      }
+    },
+    "bluetooth": {
+      "format": "",
+      "format-disabled": "󰂲",
+      "format-connected": "󰂱  {num_connections}",
+      "format-no-controller": "",
+      "on-click": "ghostty --title=terminal-float -e bluetui",
+      "tooltip-format": "{controller_alias}\t{controller_address}",
+      "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+      "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+    },
+    "wireplumber": {
+      "format": "{icon}  {volume}",
+      "format-muted": " ",
+      "format-icons": {
+        "default": ["", "", " "]
+      },
+      "on-click": "ghostty --title=terminal-float -e wiremix --tab output",
+      "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+      "max-volume": 100,
+      "scroll-step": 5
+    },
+    "wireplumber#source": {
+      "node-type": "Audio/Source",
+      "format": "󰍬 {volume}",
+      "format-muted": "󰍭",
+      "on-click": "ghostty --title=terminal-float -e wiremix --tab input",
+      "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+      "scroll-step": 5
+    },
+    "tray": {
+      "icon-size": 15,
+      "spacing": 17
+    },
+    "privacy": {
+      "icon-spacing": 12,
+      "icon-size": 18,
+      "transition-duration": 250,
+      "modules": [
+        {
+          "type": "screenshare",
+          "tooltip": true,
+          "tooltip-icon-size": 24
+        },
+        {
+          "type": "audio-in",
+          "tooltip": true,
+          "tooltip-icon-size": 24
+        }
+      ],
+      "ignore-monitor": true
+    }
 }

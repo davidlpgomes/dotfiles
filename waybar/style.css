@@ -1,15 +1,20 @@
 * {
-  font-family: "JetBrainsMono Nerd Font", "Inter", "IBM Plex Sans";
+  font-family: "Inter", "JetBrainsMono Nerd Font", "IBM Plex Sans", sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
 }
 
 window#waybar {
-  background-color: transparent;
+  background-color: #2a2a2a;
+  border-bottom: 1px solid #1a1a1a;
+  color: #e0e0e0;
 }
 
+/* Base style for all modules */
 #clock,
-#backlight,
 #battery,
 #bluetooth,
 #custom-brightness,
@@ -18,27 +23,52 @@ window#waybar {
 #custom-gpu,
 #custom-media,
 #custom-memory,
-#custom-power,
 #network,
 #privacy,
-#temperature,
 #tray,
 #wireplumber,
+#wireplumber.source,
+#workspaces {
+  background-color: #3c3c3c;
+  color: #ececec;
+  border-radius: 6px;
+  border: 1px solid #4d4d4d;
+  margin: 4px 4px;
+  padding: 0 10px;
+}
+
+/* Workspaces styling */
+#workspaces {
+  padding: 0 4px;
+}
+
 #workspaces button {
-  background-color: #000;
-  border-radius: 10px;
-  color: white;
-  margin: 0rem 0.25rem;
-  margin-top: 0.25em;
-  padding: 0.25rem 0.8rem;
+  padding: 0 6px;
+  color: #9e9e9e;
+  background: transparent;
+  margin: 2px 2px;
+  border-radius: 4px;
+}
+
+#workspaces button:hover {
+  background-color: #505050;
+  color: #ffffff;
 }
 
 #workspaces button.active {
-  color: black;
-  background-color: lightgray;
+  background-color: #606060;
+  color: #ffffff;
 }
 
-#workspaces button.hover {
-  color: black;
-  background-color: lightgrey;
+/* Battery states */
+#battery.warning {
+  color: #ffb84d;
+}
+
+#battery.critical {
+  color: #ff4d4d;
+}
+
+#battery.charging {
+  color: #85e085;
 }

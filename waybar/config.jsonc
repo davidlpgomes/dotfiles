@@ -10,11 +10,9 @@
       "wireplumber#source",
       "bluetooth",
       "custom/brightness",
-      "custom/cpu",
-      "custom/memory",
-      "custom/gpu",
-      "custom/disk",
+      "group/hardware",
       "network",
+      "custom/updates",
       "battery",
       "tray",
       "privacy"
@@ -65,6 +63,15 @@
       "format": "󰍛  {}",
       "on-click": "ghostty --title=terminal-float -e btop"
     },
+    "group/hardware": {
+      "orientation": "horizontal",
+      "modules": [
+        "custom/cpu",
+        "custom/memory",
+        "custom/gpu",
+        "custom/disk"
+      ]
+    },
     "custom/gpu": {
       "exec-if": "bash -c 'command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi -L >/dev/null 2>&1'",
       "exec": "$HOME/.config/waybar/scripts/gpu_usage.sh",
@@ -101,6 +108,15 @@
       "interval": 3,
       "spacing": 1,
       "on-click": ""
+    },
+    "custom/updates": {
+      "exec": "$HOME/.config/waybar/scripts/updates.sh",
+      "interval": 1800,
+      "signal": 8,
+      "return-type": "json",
+      "format": "󰏖  {}",
+      "on-click": "ghostty --title=terminal-float -e sudo pacman -Syu",
+      "on-click-right": "pkill -RTMIN+8 waybar"
     },
     "battery": {
       "format": "{capacity} {icon}",

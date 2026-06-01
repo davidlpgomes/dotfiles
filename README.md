@@ -13,5 +13,5 @@ i use arch btw
 - **Text editor:** [nvim](https://github.com/neovim/neovim/)
 - **Bar:** [waybar](https://github.com/Alexays/Waybar)
 - **App Launcher:** [rofi](https://github.com/davatorium/rofi)
-- **Wallpaper:** [wpaperd](https://github.com/danyspin97/wpaperd)
+- **Wallpaper:** [hyprpaper](https://github.com/hyprwm/hyprpaper)
 - **Notifications:** [dunst](https://github.com/dunst-project/dunst)

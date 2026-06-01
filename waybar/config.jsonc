@@ -37,14 +37,14 @@
       "format": "  {percentage}",
       "tooltip-format": "Brightness at {percentage}%",
       // "format-icons": ["🌑", "🌒", "🌓", "🌔", "🌕"],
-      "exec": "$HOME/.config/waybar/scripts/ddcutil.py",
+      "exec": "$HOME/.config/waybar/scripts/brightness.py",
       "interval": "once",
-      "exec-on-event": "$HOME/.config/waybar/scripts/ddcutil.py",
+      "exec-on-event": "$HOME/.config/waybar/scripts/brightness.py",
       "return-type": "json",
-      "on-scroll-up": "$HOME/.config/waybar/scripts/ddcutil.py --set +10",
-      "on-scroll-down": "$HOME/.config/waybar/scripts/ddcutil.py --set -10",
-      "on-click": "$HOME/.config/waybar/scripts/ddcutil.py --set 5",
-      "on-click-right": "$HOME/.config/waybar/scripts/ddcutil.py --set 100"
+      "on-scroll-up": "$HOME/.config/waybar/scripts/brightness.py --set +10",
+      "on-scroll-down": "$HOME/.config/waybar/scripts/brightness.py --set -10",
+      "on-click": "$HOME/.config/waybar/scripts/brightness.py --set 5",
+      "on-click-right": "$HOME/.config/waybar/scripts/brightness.py --set 100"
     },
     "custom/media": {
       "format": "{icon}  {text}",
@@ -66,6 +66,7 @@
       "on-click": "ghostty --title=terminal-float -e btop"
     },
     "custom/gpu": {
+      "exec-if": "bash -c 'command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi -L >/dev/null 2>&1'",
       "exec": "$HOME/.config/waybar/scripts/gpu_usage.sh",
       "interval": 3,
       "return-type": "json",

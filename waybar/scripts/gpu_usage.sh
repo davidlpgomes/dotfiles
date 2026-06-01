@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if ! command -v nvidia-smi >/dev/null 2>&1 || ! nvidia-smi -L >/dev/null 2>&1; then
+    exit 1
+fi
+
 # Get GPU usage percentage
 gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits)
 

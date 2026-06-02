@@ -29,7 +29,8 @@
       "format": "{:%H:%M}",
       // "format": "󰥔  {:%A, %d %b, %H:%M}",
       "tooltip-format": "<big>{:%Y %B %d, %A}</big>\n\n<tt><big>{calendar}</big></tt>",
-      "on-click": ""
+     //  "on-click": ""
+      "on-click": "~/scripts/webapp calendar.google.com",
     },
     "custom/brightness": {
       "format": "  {percentage}",

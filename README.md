@@ -9,6 +9,7 @@ i use arch btw
 - **Lock:** [hyprlock](https://github.com/hyprwm/hyprlock)
 - **Display Manager:** [ly](https://github.com/fairyglade/ly)
 - **Terminal:** [ghostty](https://github.com/ghostty-org/ghostty)
+- **Multiplexer:** [herdr](https://github.com/herdrdev/herdr)
 - **Shell:** [zsh](https://www.zsh.org/)
 - **Text editor:** [nvim](https://github.com/neovim/neovim/)
 - **Bar:** [waybar](https://github.com/Alexays/Waybar)

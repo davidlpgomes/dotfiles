@@ -15,10 +15,10 @@ if [[ $status -eq 2 ]]; then
     exit 0
 fi
 
-if [[ $status -ne 0 ]]; then
-    printf '{"text":"!","tooltip":"Unable to check for updates","class":"error"}\n'
-    exit 0
-fi
+#if [[ $status -ne 0 ]]; then
+#    printf '{"text":"!","tooltip":"Unable to check for updates","class":"error"}\n'
+#    exit 0
+#fi
 
 count=$(printf '%s\n' "$updates" | wc -l)
 tooltip=$(printf '%s\n' "$updates" | python -c 'import json, sys; print(json.dumps(sys.stdin.read().strip()))')

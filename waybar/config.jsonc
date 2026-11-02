@@ -35,13 +35,12 @@
       "format": "  {percentage}",
       "tooltip-format": "Brightness at {percentage}%",
       "exec": "$HOME/.config/waybar/scripts/brightness.py",
-      "interval": "once",
-      "exec-on-event": "$HOME/.config/waybar/scripts/brightness.py",
+      "interval": 60,
+      "signal": 9,
+      "exec-on-event": false,
       "return-type": "json",
-      "on-scroll-up": "$HOME/.config/waybar/scripts/brightness.py --set +10",
-      "on-scroll-down": "$HOME/.config/waybar/scripts/brightness.py --set -10",
-      "on-click": "$HOME/.config/waybar/scripts/brightness.py --set 5",
-      "on-click-right": "$HOME/.config/waybar/scripts/brightness.py --set 100"
+      "on-click": "$HOME/.config/waybar/scripts/brightness.py --step up && pkill -RTMIN+9 waybar",
+      "on-click-right": "$HOME/.config/waybar/scripts/brightness.py --step down && pkill -RTMIN+9 waybar"
     },
     "custom/media": {
       "format": "{icon}  {text}",
@@ -72,7 +71,6 @@
       ]
     },
     "custom/gpu": {
-      "exec-if": "bash -c 'command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi -L >/dev/null 2>&1'",
       "exec": "$HOME/.config/waybar/scripts/gpu_usage.sh",
       "interval": 3,
       "return-type": "json",
@@ -112,9 +110,10 @@
       "exec": "$HOME/.config/waybar/scripts/updates.sh",
       "interval": 1800,
       "signal": 8,
+      "exec-on-event": false,
       "return-type": "json",
       "format": "󰏖  {}",
-      "on-click": "ghostty --title=terminal-float -e sudo pacman -Syu",
+      "on-click": "ghostty --title=terminal-float -e sh -c 'sudo pacman -Syu; pkill -RTMIN+8 waybar'",
       "on-click-right": "pkill -RTMIN+8 waybar"
     },
     "battery": {

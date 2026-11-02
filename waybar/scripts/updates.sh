@@ -7,7 +7,7 @@ if ! command -v checkupdates >/dev/null 2>&1; then
     exit 0
 fi
 
-updates=$(checkupdates 2>/dev/null)
+updates=$(flock "${XDG_RUNTIME_DIR:-/tmp}/waybar-checkupdates.lock" checkupdates 2>/dev/null)
 status=$?
 
 if [[ $status -eq 2 ]]; then
@@ -15,10 +15,10 @@ if [[ $status -eq 2 ]]; then
     exit 0
 fi
 
-#if [[ $status -ne 0 ]]; then
-#    printf '{"text":"!","tooltip":"Unable to check for updates","class":"error"}\n'
-#    exit 0
-#fi
+if [[ $status -ne 0 ]]; then
+    printf '{"text":"!","tooltip":"Unable to check for updates","class":"error"}\n'
+    exit 0
+fi
 
 count=$(printf '%s\n' "$updates" | wc -l)
 tooltip=$(printf '%s\n' "$updates" | python -c 'import json, sys; print(json.dumps(sys.stdin.read().strip()))')

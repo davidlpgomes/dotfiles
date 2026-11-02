@@ -1,26 +1,17 @@
 #!/bin/bash
 
-if ! command -v nvidia-smi >/dev/null 2>&1 || ! nvidia-smi -L >/dev/null 2>&1; then
-    exit 1
-fi
-
-# Get GPU usage percentage
-gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits)
-
-# Get detailed GPU information for tooltip
-gpu_temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)
-gpu_power=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader)
-gpu_clock=$(nvidia-smi --query-gpu=clocks.gr --format=csv,noheader)
-gpu_vram=$(nvidia-smi --query-gpu=memory.used,memory.total --format=csv,noheader)
+# Get all GPU values in one call. Waybar hides the module if this fails.
+gpu_data=$(nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,power.draw,clocks.gr,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null) || exit 1
+IFS=', ' read -r gpu_usage gpu_temp gpu_power gpu_clock gpu_vram_used gpu_vram_total <<< "$gpu_data"
 
 # Get top 10 processes by GPU memory usage
-top_processes=$(nvidia-smi pmon -c 1 -s m | tail -n +3 | grep -v "^#" | awk '$2 != "-" {print $2, $4, $6}' | sort -k3 -rn | head -10)
+top_processes=$(nvidia-smi pmon -c 1 -s m | tail -n +3 | grep -v "^#" | awk '$2 != "-" {print $2, $4, $6}' | sort -k2 -rn | head -10)
 
 # Build tooltip
 tooltip="GPU Temp: ${gpu_temp}°C\n"
-tooltip+="GPU Power: ${gpu_power}\n"
-tooltip+="GPU Clock: ${gpu_clock}\n"
-tooltip+="VRAM Usage: ${gpu_vram}\n"
+tooltip+="GPU Power: ${gpu_power} W\n"
+tooltip+="GPU Clock: ${gpu_clock} MHz\n"
+tooltip+="VRAM Usage: ${gpu_vram_used} MiB, ${gpu_vram_total} MiB\n"
 tooltip+="\nTop Processes:\n"
 
 if [ -n "$top_processes" ]; then

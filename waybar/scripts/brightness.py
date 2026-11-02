@@ -1,10 +1,31 @@
 #!/usr/bin/env python
 
+import fcntl
 import json
+import os
 import re
 import shutil
 import subprocess
 import sys
+
+
+def hold_ddc_lock():
+    """Keep one script instance at a time talking to ddcutil."""
+    path = os.path.join(
+        os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "waybar-brightness.lock"
+    )
+    handle = open(path, "w")
+    fcntl.flock(handle, fcntl.LOCK_EX)
+    return handle
+
+
+def parse_brightness(output):
+    """Find the value in ddcutil output, which may include flock diagnostics."""
+    match = re.search(r"current value =\s*(\d+)", output)
+    if match is None:
+        print(f"Unexpected ddcutil output: {output!r}", file=sys.stderr)
+        sys.exit(1)
+    return int(match.group(1))
 
 
 def has_ddcutil():
@@ -46,9 +67,7 @@ def get_brightness(display_num):
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     value = result.stdout.decode("utf8")
 
-    # output looks like this: VCP code 0x10 (Brightness                    ): current value =    20, max value =   100
-    percentage = value.split(":")[1].split(",")[0].split("=")[1].strip(" ")
-    return int(percentage)
+    return parse_brightness(value)
 
 
 def set_brightness(display_num, value):
@@ -84,26 +103,27 @@ def brightnessctl_set(value):
 # --- shared helper ---
 
 
-def calculate_new_brightness(current, value_str):
-    """Calculate new brightness from current value and a string like '50', '+10', or '-15'."""
-    if value_str.startswith("+"):
-        new_value = current + int(value_str[1:])
-    elif value_str.startswith("-"):
-        new_value = current - int(value_str[1:])
-    else:
-        new_value = int(value_str)
+BRIGHTNESS_STEPS = [5, 25, 50, 75, 100]
 
-    # Clamp between 0 and 100
-    return max(0, min(100, new_value))
 
+def next_brightness_step(current, direction):
+    """Return the nearest step above or below current, so 35 becomes 50 or 25."""
+    if direction == "up":
+        return next((s for s in BRIGHTNESS_STEPS if s > current), BRIGHTNESS_STEPS[-1])
+    return next(
+        (s for s in reversed(BRIGHTNESS_STEPS) if s < current), BRIGHTNESS_STEPS[0]
+    )
+
+
+ddc_lock = hold_ddc_lock()
 
 # Parse command line arguments
-if len(sys.argv) > 1 and sys.argv[1] == "--set":
-    if len(sys.argv) < 3:
-        print("Usage: --set <value>", file=sys.stderr)
+if len(sys.argv) > 1 and sys.argv[1] == "--step":
+    if len(sys.argv) < 3 or sys.argv[2] not in ("up", "down"):
+        print("Usage: --step <up|down>", file=sys.stderr)
         sys.exit(1)
 
-    value_arg = sys.argv[2]
+    direction = sys.argv[2]
 
     if has_ddcutil():
         displays = detect_displays()
@@ -126,7 +146,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "--set":
         current_brightness = get_brightness(aoc_display)
 
         # Calculate new brightness
-        new_brightness = calculate_new_brightness(current_brightness, value_arg)
+        new_brightness = next_brightness_step(current_brightness, direction)
 
         # Set AOC display first
         set_brightness(aoc_display, new_brightness)
@@ -145,7 +165,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "--set":
     else:
         # Use brightnessctl for notebook
         current_brightness = brightnessctl_get()
-        new_brightness = calculate_new_brightness(current_brightness, value_arg)
+        new_brightness = next_brightness_step(current_brightness, direction)
         brightnessctl_set(new_brightness)
         actual_brightness = brightnessctl_get()
 
@@ -157,13 +177,10 @@ else:
     data = {}
 
     if has_ddcutil():
-        cmd = ["ddcutil", "getvcp", "10", "-d", "1"]
+        cmd = ["ddcutil", "getvcp", "10", "--mfg", "AOC"]
         value = subprocess.run(cmd, stdout=subprocess.PIPE).stdout.decode("utf8")
 
-        # output looks like this in my case: VCP code 0x10 (Brightness                    ): current value =    20, max value =   100
-        percentage = value.split(":")[1].split(",")[0].split("=")[1].strip(" ")
-
-        data["percentage"] = int(percentage)
+        data["percentage"] = parse_brightness(value)
     else:
         data["percentage"] = brightnessctl_get()
 

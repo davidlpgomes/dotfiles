@@ -1,21 +1,37 @@
+/* Palette */
+@define-color bg #18181b;
+@define-color bg-edge #0f0f11;
+@define-color surface #242428;
+@define-color surface-hover #34343a;
+@define-color border #303038;
+@define-color text #f5f5f5;
+@define-color text-strong #ffffff;
+@define-color muted #aeb3bb;
+@define-color active #f2f2f3;
+@define-color warning #ffb84d;
+@define-color critical #ff4d4d;
+@define-color success #85e085;
+
 * {
   font-family:
     "Adwaita Sans", "JetBrainsMono Nerd Font", "IBM Plex Sans", sans-serif;
   font-size: 16px;
   font-weight: 600;
+  font-feature-settings: "tnum";
   border: none;
   border-radius: 0;
   min-height: 0;
 }
 
 window#waybar {
-  background-color: #18181b;
-  border-bottom: 1px solid #0f0f11;
-  color: #f5f5f5;
+  background-color: @bg;
+  border-bottom: 1px solid @bg-edge;
+  color: @text;
 }
 
 /* Base style for all modules */
 #clock,
+#audio,
 #battery,
 #bluetooth,
 #custom-brightness,
@@ -28,30 +44,53 @@ window#waybar {
 #hardware,
 #network,
 #privacy,
+#system,
 #tray,
 #wireplumber,
 #wireplumber.source,
 #workspaces {
-  background-color: #242428;
-  color: #f5f5f5;
+  background-color: @surface;
+  color: @text;
   border-radius: 6px;
-  border: 1px solid #303038;
+  border: 1px solid @border;
   margin: 4px 4px;
   padding: 0 10px;
 }
 
-#hardware {
+/* Module groups share one box */
+#audio,
+#hardware,
+#system {
   padding: 0 4px;
 }
 
+#audio #wireplumber,
+#audio #bluetooth,
 #hardware #custom-cpu,
 #hardware #custom-memory,
 #hardware #custom-gpu,
-#hardware #custom-disk {
+#hardware #custom-disk,
+#system #network,
+#system #custom-updates,
+#system #battery,
+#system #tray {
   border: none;
   margin: 0;
   padding: 0 7px;
   background-color: transparent;
+}
+
+/* Modules with a click action */
+#clock:hover,
+#custom-brightness:hover,
+#audio #wireplumber:hover,
+#audio #bluetooth:hover,
+#hardware #custom-cpu:hover,
+#hardware #custom-memory:hover,
+#hardware #custom-gpu:hover,
+#hardware #custom-disk:hover,
+#system #custom-updates:hover {
+  background-color: @surface-hover;
 }
 
 /* Workspaces styling */
@@ -61,48 +100,62 @@ window#waybar {
 
 #workspaces button {
   padding: 0 6px;
-  color: #aeb3bb;
+  color: @muted;
   background: transparent;
   margin: 2px 2px;
   border-radius: 4px;
 }
 
 #workspaces button:hover {
-  background-color: #34343a;
-  color: #ffffff;
+  background-color: @surface-hover;
+  color: @text-strong;
 }
 
 #workspaces button.active {
-  background-color: #f2f2f3;
-  color: #18181b;
+  background-color: @active;
+  color: @bg;
 }
 
 /* Battery states */
 #battery.warning {
-  color: #ffb84d;
+  color: @warning;
 }
 
 #battery.critical {
-  color: #ff4d4d;
+  color: @critical;
 }
 
 #battery.charging {
-  color: #85e085;
+  color: @success;
 }
 
 #custom-updates.warning {
-  color: #ffb84d;
+  color: @warning;
 }
 
 #custom-updates.critical,
 #custom-updates.error {
-  color: #ff4d4d;
+  color: @critical;
 }
 
 #custom-updates.updated {
-  color: #85e085;
+  color: @muted;
 }
 
 #custom-updates.missing {
-  color: #aeb3bb;
+  color: @muted;
+}
+
+/* Tooltips */
+tooltip {
+  background-color: @bg;
+  border: 1px solid @border;
+  border-radius: 6px;
+}
+
+tooltip label {
+  color: @text;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 13px;
+  font-weight: 400;
 }

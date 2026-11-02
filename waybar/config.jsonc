@@ -5,18 +5,31 @@
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": [
-      "wireplumber",
-      "wireplumber#source",
-      "bluetooth",
+      "group/audio",
       "custom/brightness",
       "group/hardware",
-      "network",
-      "custom/updates",
-      "battery",
-      "tray",
+      "group/system",
       "privacy"
     ],
+    "group/audio": {
+      "orientation": "inherit",
+      "modules": [
+        "wireplumber",
+        "wireplumber#source",
+        "bluetooth"
+      ]
+    },
+    "group/system": {
+      "orientation": "inherit",
+      "modules": [
+        "network",
+        "custom/updates",
+        "battery",
+        "tray"
+      ]
+    },
     "custom/brightness": {
+      "min-length": 5,
       "format": "  {percentage}",
       "tooltip-format": "Brightness at {percentage}%",
       "exec": "$HOME/.config/waybar/scripts/brightness.py",
@@ -40,6 +53,7 @@
       "on-click": "playerctl --player=spotify play-pause"
     },
     "custom/cpu": {
+      "min-length": 4,
       "exec": "$HOME/.config/waybar/scripts/cpu_usage.sh",
       "interval": 3,
       "return-type": "json",
@@ -56,6 +70,7 @@
       ]
     },
     "custom/gpu": {
+      "min-length": 4,
       "exec": "$HOME/.config/waybar/scripts/gpu_usage.sh",
       "interval": 10,
       "return-type": "json",
@@ -63,6 +78,7 @@
       "on-click": "ghostty --title=terminal-float -e watch -n 0.5 nvidia-smi"
     },
     "custom/memory": {
+      "min-length": 4,
       "exec": "$HOME/.config/waybar/scripts/memory_usage.py",
       "interval": 5,
       "return-type": "json",
@@ -70,6 +86,7 @@
       "on-click": "ghostty --title=terminal-float -e btop"
     },
     "custom/disk": {
+      "min-length": 4,
       "interval": 30,
       "format": "  {}",
       "path": "/",
@@ -92,6 +109,7 @@
       "on-click": ""
     },
     "custom/updates": {
+      "min-length": 5,
       "exec": "$HOME/.config/waybar/scripts/updates.sh",
       "interval": 1800,
       "signal": 8,

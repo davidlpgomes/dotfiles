@@ -1,0 +1,161 @@
+// Blocos usados tanto na barra completa quanto na barra reduzida do DP-2.
+let {
+    // anchor_to_edges = false centralizaria a barra. position tem padrao "bottom".
+    $base = { position = "top" anchor_to_edges = true height = 40 }
+
+    $workspaces = { type = "workspaces" }
+    $clock = { type = "clock" format = "󰥔  %A, %d %b, %H:%M" }
+
+    $hardware = {
+        type = "custom"
+        class = "hardware"
+        bar = [
+            {
+                type = "button"
+                class = "cpu"
+                label = "󰍛  {{3000:~/.config/ironbar/scripts/cpu_usage.sh}}"
+                tooltip = "#cpu_tooltip"
+                on_click = "!ghostty --title=terminal-float -e btop"
+            }
+            {
+                type = "button"
+                class = "memory"
+                label = "   {{5000:~/.config/ironbar/scripts/memory_usage.py}}"
+                tooltip = "#memory_tooltip"
+                on_click = "!ghostty --title=terminal-float -e btop"
+            }
+            {
+                type = "button"
+                class = "gpu"
+                label = "󰢮  {{10000:~/.config/ironbar/scripts/gpu_usage.sh}}"
+                tooltip = "#gpu_tooltip"
+                on_click = "!ghostty --title=terminal-float -e watch -n 0.5 nvidia-smi"
+            }
+            {
+                type = "button"
+                class = "disk"
+                label = "  {{30000:~/.config/ironbar/scripts/disk_usage.sh}}"
+                tooltip = "#disk_tooltip"
+                on_click = "!ghostty --title=terminal-float -e gdu /"
+                on_click_right = "ghostty --title=terminal-float -e yazi ~"
+            }
+        ]
+    }
+
+    $speaker = {
+        type = "volume"
+        class = "speaker"
+        show_sources = false
+        disable_popup = true
+        max_volume = 100
+        format = "{icon}  {percentage}"
+        mute_format = "{icon} "
+        // Os perfis padrao trocariam os icones. Cada perfil precisa definir
+        // volume e muted, porque o que faltar volta ao padrao do ironbar.
+        use_default_profiles = false
+        icons.volume = ""
+        icons.muted = ""
+        profiles = {
+            medium.when = 66.66
+            medium.icons.volume = ""
+            medium.icons.muted = ""
+            low.when = 33.33
+            low.icons.volume = ""
+            low.icons.muted = ""
+        }
+        on_click_left = "ghostty --title=terminal-float -e wiremix --tab output"
+        on_click_right = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        on_scroll_up = "wpctl set-volume --limit 1 @DEFAULT_AUDIO_SINK@ 5%+"
+        on_scroll_down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+    }
+
+    $mic = {
+        type = "volume"
+        class = "mic"
+        show_sinks = false
+        disable_popup = true
+        max_volume = 100
+        format = "{icon} {percentage}"
+        mute_format = "{icon}"
+        use_default_profiles = false
+        icons.mic_volume = "󰍬"
+        icons.mic_muted = "󰍭"
+        on_click_left = "ghostty --title=terminal-float -e wiremix --tab input"
+        on_click_right = "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+        on_scroll_up = "wpctl set-volume --limit 1 @DEFAULT_AUDIO_SOURCE@ 5%+"
+        on_scroll_down = "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-"
+    }
+
+    $audio = {
+        type = "custom"
+        class = "audio"
+        bar = [
+            $speaker
+            $mic
+            {
+                type = "button"
+                class = "bluetooth"
+                label = "{{watch:~/.config/ironbar/scripts/bluetooth.sh}}"
+                tooltip = "#bluetooth_tooltip"
+                on_click = "!ghostty --title=terminal-float -e bluetui"
+            }
+        ]
+    }
+
+    $brightness = {
+        type = "custom"
+        class = "brightness"
+        bar = [
+            {
+                type = "button"
+                // O script imprime nada e publica #brightness. Assim o clique
+                // atualiza o rotulo na hora, sem esperar os 60s do poll.
+                label = "  #brightness{{60000:~/.config/ironbar/scripts/brightness.py}}"
+                tooltip = "Brightness at #brightness%"
+                on_click = "!~/.config/ironbar/scripts/brightness.py --step up"
+                on_click_right = "~/.config/ironbar/scripts/brightness.py --step down"
+            }
+        ]
+    }
+
+    $tray = { type = "tray" icon_size = 15 }
+
+    $system = {
+        type = "custom"
+        class = "system"
+        // updates.sh usa este nome para trocar a classe de cor do item.
+        name = "system"
+        bar = [
+            {
+                type = "button"
+                class = "network"
+                label = "{{watch:~/.config/ironbar/scripts/network.sh}}"
+                tooltip = "#network_tooltip"
+                on_click = "!ghostty --title=terminal-float -e impala"
+                on_click_right = "ghostty --title=terminal-float -e sudo netscanner"
+            }
+            {
+                type = "button"
+                class = "updates"
+                label = "󰏖  #updates{{1800000:~/.config/ironbar/scripts/updates.sh}}"
+                tooltip = "#updates_tooltip"
+                on_click = "!ghostty --title=terminal-float -e sh -c 'sudo pacman -Syu; ~/.config/ironbar/scripts/updates.sh'"
+                on_click_right = "~/.config/ironbar/scripts/updates.sh"
+            }
+            $tray
+        ]
+    }
+} in {
+    // Nivel superior: barra completa, vale para todo monitor nao listado em "monitors".
+    ..$base
+    start = [ $hardware $workspaces ]
+    center = [ $clock ]
+    end = [ $audio $brightness $system ]
+
+    // Equivalente ao "output": "DP-2" do waybar.
+    monitors.DP-2 = {
+        ..$base
+        start = [ $workspaces ]
+        center = [ $clock ]
+    }
+}

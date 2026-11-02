@@ -117,8 +117,8 @@ hl.config({
 		layout = "dwindle",
 	},
 	decoration = {
-		rounding = 20,
-		rounding_power = 0,
+		rounding = 0,
+		rounding_power = 1.0,
 		-- Change transparency of focused and unfocused windows
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
@@ -260,7 +260,7 @@ else
     touch /tmp/hypr-zenmode && pkill -SIGUSR1 waybar
 fi]])
 )
-hl.bind(secMod .. " + Z", hl.dsp.exec_cmd("pkill waybar && waybar &"))
+hl.bind(secMod .. " + Z", hl.dsp.exec_cmd("pkill -SIGUSR2 -x waybar"))
 
 -- Move focus with mainMod + H/J/K/L
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))

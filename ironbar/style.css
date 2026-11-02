@@ -1,0 +1,190 @@
+/* Paleta copiada de ~/.config/waybar/style.css */
+@define-color bg #18181b;
+@define-color surface #242428;
+@define-color surface-hover #34343a;
+@define-color border #303038;
+@define-color text #f5f5f5;
+@define-color text-strong #ffffff;
+@define-color muted #aeb3bb;
+@define-color active #f2f2f3;
+@define-color warning #ffb84d;
+@define-color critical #ff4d4d;
+
+* {
+  font-family:
+    "Adwaita Sans", "JetBrainsMono Nerd Font", "IBM Plex Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+
+/* Limitado a button: um reset em * deixa quadrados os sliders e switches
+   dos popups de volume e bluetooth. */
+button {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* window.background, e nao .background: tooltip e popover tambem tem essa
+   classe e ficariam transparentes. */
+window.background,
+#bar,
+box,
+button,
+label {
+  background-color: transparent;
+}
+
+label {
+  color: @text;
+}
+
+/* Distancia das bordas da tela */
+#bar #start {
+  margin-left: 8px;
+}
+
+#bar #end {
+  margin-right: 8px;
+}
+
+/* Base de todos os modulos */
+.hardware,
+.workspaces,
+.clock,
+.audio,
+.brightness,
+.system {
+  background-color: @surface;
+  border: 1px solid @border;
+  border-radius: 6px;
+  margin: 4px;
+  padding: 0 10px;
+}
+
+.clock:hover {
+  background-color: @surface-hover;
+}
+
+/* Grupos: uma caixa so, como os group/* do waybar */
+.audio,
+.brightness,
+.hardware,
+.system {
+  padding: 0 4px;
+}
+
+.audio button,
+.brightness button,
+.hardware button,
+.system button {
+  padding: 0 7px;
+  border-radius: 4px;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Equivalente ao min-length: 4 do waybar. O GTK nao aceita largura em
+   caracteres no CSS: 44px e a medida de width_chars=4 com esta fonte.
+   O audio usa 50px para o valor 100 tambem nao deslocar os vizinhos. */
+.brightness button label,
+.hardware button label,
+.system button label {
+  min-width: 44px;
+}
+
+.audio button label {
+  min-width: 50px;
+}
+
+.audio .bluetooth label {
+  min-width: 44px;
+}
+
+.audio button:hover,
+.brightness button:hover,
+.hardware button:hover,
+.system button:hover {
+  background-color: @surface-hover;
+}
+
+/* Sem margem no .tray: o ironbar esconde itens Passive (Spotify), e a margem
+   sobraria como espaco vazio na caixa quando nao ha nenhum outro item. */
+.tray .item {
+  padding: 0 6px;
+  border-radius: 4px;
+}
+
+.tray .item:hover {
+  background-color: @surface-hover;
+}
+
+/* Cores do updates. updates.sh poe a classe no modulo "system". */
+.system.updates-warning .updates label {
+  color: @warning;
+}
+
+.system.updates-critical .updates label,
+.system.updates-error .updates label {
+  color: @critical;
+}
+
+.system.updates-updated .updates label,
+.system.updates-missing .updates label {
+  color: @muted;
+}
+
+/* Workspaces. .visible cobre o workspace mostrado em cada monitor,
+   igual ao button.active do waybar. .focused so vale no monitor em foco. */
+.workspaces {
+  padding: 0 4px;
+}
+
+.workspaces .item {
+  padding: 0 6px;
+  margin: 2px;
+  border-radius: 4px;
+}
+
+.workspaces .item label {
+  color: @muted;
+}
+
+.workspaces .item:hover {
+  background-color: @surface-hover;
+}
+
+.workspaces .item:hover label {
+  color: @text-strong;
+}
+
+.workspaces .item.visible {
+  background-color: @active;
+}
+
+.workspaces .item.visible label {
+  color: @bg;
+}
+
+/* Popups e tooltips */
+popover contents {
+  background-color: @bg;
+  border: 1px solid @border;
+  border-radius: 6px;
+  padding: 0;
+}
+
+.popup {
+  padding: 12px;
+}
+
+tooltip {
+  background-color: @bg;
+  border: 1px solid @border;
+  border-radius: 6px;
+}
+
+tooltip label {
+  font-size: 17px;
+}

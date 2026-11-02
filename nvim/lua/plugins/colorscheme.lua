@@ -9,9 +9,4 @@ return {
         lazy = false,
         priority = 1000,
     },
-    {
-        'nyoom-engineering/oxocarbon.nvim',
-        lazy = false,
-        priority = 1000,
-    },
 }

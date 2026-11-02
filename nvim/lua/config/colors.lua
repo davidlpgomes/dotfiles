@@ -1,4 +1,4 @@
-vim.cmd.colorscheme('oxocarbon')
+vim.cmd.colorscheme('aylin')
 vim.opt.background = 'dark'
 
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })

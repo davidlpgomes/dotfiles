@@ -3,7 +3,7 @@ configuration {
     sorting-method: "normal";
     show-icons: true;
     matching: "fuzzy";
-    drun-match-fields: "name,generic,exec,categories,keywords";
+    drun-match-fields: "name";
     case-sensitive: false;
     cycle: true;
     terminal: "ghostty";

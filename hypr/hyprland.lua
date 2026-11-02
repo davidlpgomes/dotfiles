@@ -65,7 +65,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
 
 	-- Status bar
-	hl.exec_cmd("waybar --log-level error")
+	hl.exec_cmd("ironbar")
 
 	-- Notification daemon (dunst)
 	hl.exec_cmd("dunst")
@@ -255,12 +255,13 @@ hl.bind(
 	mainMod .. " + Z",
 	hl.dsp.exec_cmd([[
 if [ -f /tmp/hypr-zenmode ]; then
-    rm /tmp/hypr-zenmode && pkill -SIGUSR1 waybar
+    rm /tmp/hypr-zenmode && ironbar bar main show && ironbar bar side show
 else
-    touch /tmp/hypr-zenmode && pkill -SIGUSR1 waybar
+    touch /tmp/hypr-zenmode && ironbar bar main hide && ironbar bar side hide
 fi]])
 )
-hl.bind(secMod .. " + Z", hl.dsp.exec_cmd("pkill -SIGUSR2 -x waybar"))
+-- Restart, not "ironbar reload": in 0.19.1 reload leaves the old scripts running
+hl.bind(secMod .. " + Z", hl.dsp.exec_cmd("rm -f /tmp/hypr-zenmode; pkill -x ironbar; ironbar"))
 
 -- Move focus with mainMod + H/J/K/L
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))

@@ -2,12 +2,11 @@
   {
     "include": "~/.config/waybar/shared.jsonc",
     "output": "!DP-2",
-    "modules-left": ["hyprland/workspaces"],
+    "modules-left": ["group/hardware", "hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": [
       "group/audio",
       "custom/brightness",
-      "group/hardware",
       "group/system",
       "privacy"
     ],
@@ -29,7 +28,7 @@
       ]
     },
     "custom/brightness": {
-      "min-length": 5,
+      "min-length": 4,
       "format": "  {percentage}",
       "tooltip-format": "Brightness at {percentage}%",
       "exec": "$HOME/.config/waybar/scripts/brightness.py",
@@ -96,6 +95,7 @@
       "on-click-right": "ghostty --title=terminal-float -e yazi ~"
     },
     "network": {
+      "min-length": 4,
       "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
       "format": "{icon}",
       "format-wifi": "{icon}",
@@ -106,10 +106,11 @@
       "tooltip-format-disconnected": "Disconnected",
       "interval": 3,
       "spacing": 1,
-      "on-click": ""
+      "on-click": "ghostty --title=terminal-float -e impala",
+      "on-click-right": "ghostty --title=terminal-float -e sudo netscanner"
     },
     "custom/updates": {
-      "min-length": 5,
+      "min-length": 4,
       "exec": "$HOME/.config/waybar/scripts/updates.sh",
       "interval": 1800,
       "signal": 8,
@@ -120,6 +121,7 @@
       "on-click-right": "pkill -RTMIN+8 waybar"
     },
     "battery": {
+      "min-length": 4,
       "format": "{capacity} {icon}",
       "format-discharging": "{icon}",
       "format-charging": "{icon}",
@@ -138,6 +140,7 @@
       }
     },
     "bluetooth": {
+      "min-length": 4,
       "format": "",
       "format-disabled": "󰂲",
       "format-connected": "󰂱  {num_connections}",
@@ -148,6 +151,7 @@
       "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
     },
     "wireplumber": {
+      "min-length": 4,
       "format": "{icon}  {volume}",
       "format-muted": " ",
       "format-icons": {
@@ -160,6 +164,7 @@
     },
     "wireplumber#source": {
       "node-type": "Audio/Source",
+      "min-length": 4,
       "format": "󰍬 {volume}",
       "format-muted": "󰍭",
       "on-click": "ghostty --title=terminal-float -e wiremix --tab input",

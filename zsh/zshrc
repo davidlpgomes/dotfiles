@@ -71,6 +71,4 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init zsh)"
-
-# opencode
-export PATH=/home/david/.opencode/bin:$PATH
+eval "$(direnv hook zsh)"

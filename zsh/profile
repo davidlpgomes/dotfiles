@@ -6,7 +6,21 @@ export PATH=$PATH:/opt/cuda/bin
 export EDITOR="nvim"
 export BROWSER="zen-browser"
 
+# Set profix to npm installs with `npm install -g`
+export npm_config_prefix="$HOME/.local"
+
 export XDG_CONFIG_HOME="/home/david/.config"
 
 # SSH
 export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
+
+# Claudios
+alias claude-personal='CLAUDE_CONFIG_DIR=$HOME/.claude-personal command claude'
+alias claude-work='CLAUDE_CONFIG_DIR=$HOME/.claude-work command claude'
+alias claude="echo 'Use claude-personal or claude-work'"
+
+# HOME SERVER
+## HERMES
+hermes-server() {
+    ssh -t nous 'bash -lic hermes'
+}

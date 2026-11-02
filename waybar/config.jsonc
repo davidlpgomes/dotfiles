@@ -1,8 +1,7 @@
-{
-    "layer": "top",
-    "position": "top",
-    "spacing": 0,
-    "height": 40,
+[
+  {
+    "include": "~/.config/waybar/shared.jsonc",
+    "output": "!DP-2",
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": [
@@ -17,20 +16,6 @@
       "tray",
       "privacy"
     ],
-    "hyprland/workspaces": {
-      "format": "{icon}",
-      "format-icons": {
-        "1": "1", "2": "2", "3": "3", "4": "4", "5": "5",
-        "6": "6", "7": "7", "8": "8", "9": "9", "10": "10"
-      }
-    },
-    "clock": {
-      // "format": "{:%H:%M}",
-      "format": "󰥔  {:%A, %d %b, %H:%M}",
-      "tooltip-format": "<big>{:%Y %B %d, %A}</big>\n\n<tt><big>{calendar}</big></tt>",
-     //  "on-click": ""
-      "on-click": "~/scripts/webapp calendar.google.com",
-    },
     "custom/brightness": {
       "format": "  {percentage}",
       "tooltip-format": "Brightness at {percentage}%",
@@ -72,7 +57,7 @@
     },
     "custom/gpu": {
       "exec": "$HOME/.config/waybar/scripts/gpu_usage.sh",
-      "interval": 3,
+      "interval": 10,
       "return-type": "json",
       "format": "󰢮  {}",
       "on-click": "ghostty --title=terminal-float -e watch -n 0.5 nvidia-smi"
@@ -165,7 +150,8 @@
     },
     "tray": {
       "icon-size": 15,
-      "spacing": 17
+      "spacing": 17,
+      "show-passive-items": true
     },
     "privacy": {
       "icon-spacing": 12,
@@ -185,4 +171,12 @@
       ],
       "ignore-monitor": true
     }
-}
+  },
+  {
+    "include": "~/.config/waybar/shared.jsonc",
+    "output": "DP-2",
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": []
+  }
+]

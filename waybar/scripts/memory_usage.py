@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import html
 import json
 import subprocess
 
@@ -85,5 +86,6 @@ def get_top_processes(meminfo):
 
 if __name__ == "__main__":
     usage, meminfo = get_mem_usage()
-    tooltip = get_top_processes(meminfo)
+    # Waybar reads the tooltip as Pango markup
+    tooltip = html.escape(get_top_processes(meminfo), quote=False)
     print(json.dumps({"text": f"{usage}", "tooltip": tooltip}))

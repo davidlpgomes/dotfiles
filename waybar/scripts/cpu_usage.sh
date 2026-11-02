@@ -20,13 +20,11 @@ tooltip=$(awk 'found {name=$12; for (i=13; i<=NF; i++) name=name " " $i; print n
 
 # Prepend CPU temperature to tooltip
 if [[ "$cpu_temp" != "N/A" ]]; then
-    tooltip=$(printf "CPU Temp: %.1f°C\\n\n%s" "$cpu_temp" "$tooltip")
+    tooltip=$(printf 'CPU Temp: %.1f°C\n\n%s' "$cpu_temp" "$tooltip")
 else
-    tooltip=$(printf "CPU Temp: N/A\\n\n%s" "$tooltip")
+    tooltip=$(printf 'CPU Temp: N/A\n\n%s' "$tooltip")
 fi
 
-# Remove trailing newline
-tooltip=$(echo "$tooltip" | sed ':a;N;$!ba;s/\n/\\n/g')
-
-# Output JSON for Waybar
-printf '{"text":"%.0f","tooltip":"%s"}\n' "$cpu_percent" "$tooltip"
+# Output JSON for Waybar, which reads the tooltip as Pango markup
+jq -cn --arg text "$(printf '%.0f' "$cpu_percent")" --arg tooltip "$tooltip" \
+    '{text: $text, tooltip: ($tooltip | gsub("&"; "&amp;") | gsub("<"; "&lt;"))}'

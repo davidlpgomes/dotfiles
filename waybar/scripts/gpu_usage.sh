@@ -8,22 +8,21 @@ IFS=', ' read -r gpu_usage gpu_temp gpu_power gpu_clock gpu_vram_used gpu_vram_t
 top_processes=$(nvidia-smi pmon -c 1 -s m | tail -n +3 | grep -v "^#" | awk '$2 != "-" {print $2, $4, $6}' | sort -k2 -rn | head -10)
 
 # Build tooltip
-tooltip="GPU Temp: ${gpu_temp}°C\n"
-tooltip+="GPU Power: ${gpu_power} W\n"
-tooltip+="GPU Clock: ${gpu_clock} MHz\n"
-tooltip+="VRAM Usage: ${gpu_vram_used} MiB, ${gpu_vram_total} MiB\n"
-tooltip+="\nTop Processes:\n"
+nl=$'\n'
+tooltip="GPU Temp: ${gpu_temp}°C${nl}"
+tooltip+="GPU Power: ${gpu_power} W${nl}"
+tooltip+="GPU Clock: ${gpu_clock} MHz${nl}"
+tooltip+="VRAM Usage: ${gpu_vram_used} MiB, ${gpu_vram_total} MiB${nl}"
+tooltip+="${nl}Top Processes:"
 
 if [ -n "$top_processes" ]; then
-    while IFS= read -r line; do
-        pid=$(echo "$line" | awk '{print $1}')
-        mem=$(echo "$line" | awk '{print $2}')
-        name=$(echo "$line" | awk '{print $3}')
-        tooltip+="  PID: ${pid} | ${name} | Mem: ${mem} MB\n"
+    while read -r pid mem name; do
+        tooltip+="${nl}  PID: ${pid} | ${name} | Mem: ${mem} MB"
     done <<< "$top_processes"
 else
-    tooltip+="  No active processes\n"
+    tooltip+="${nl}  No active processes"
 fi
 
-# Output JSON for waybar
-echo "{\"text\":\"${gpu_usage}\",\"tooltip\":\"${tooltip}\"}"
+# Output JSON for Waybar, which reads the tooltip as Pango markup
+jq -cn --arg text "$gpu_usage" --arg tooltip "$tooltip" \
+    '{text: $text, tooltip: ($tooltip | gsub("&"; "&amp;") | gsub("<"; "&lt;"))}'

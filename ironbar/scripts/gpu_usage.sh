@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Machines without a dedicated GPU hide this item with show_if
+command -v nvidia-smi >/dev/null || exit 0
+
 # Get all GPU values in one call. On failure ironbar ignores the output.
 gpu_data=$(nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,power.draw,clocks.gr,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null) || exit 1
 IFS=', ' read -r gpu_usage gpu_temp gpu_power gpu_clock gpu_vram_used gpu_vram_total <<< "$gpu_data"

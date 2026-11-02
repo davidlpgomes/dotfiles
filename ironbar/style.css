@@ -1,6 +1,6 @@
 /* Paleta copiada de ~/.config/waybar/style.css */
-@define-color bg #18181b;
-@define-color surface #242428;
+@define-color bg #161713;
+@define-color surface @bg;
 @define-color surface-hover #34343a;
 @define-color border #303038;
 @define-color text #f5f5f5;
@@ -9,6 +9,7 @@
 @define-color active #f2f2f3;
 @define-color warning #ffb84d;
 @define-color critical #ff4d4d;
+@define-color success #85e085;
 
 * {
   font-family:
@@ -63,7 +64,9 @@ label {
   padding: 0 10px;
 }
 
-.clock:hover {
+/* :active em vez de :hover: com popup_autohide, clicar numa janela fecha o
+   calendario sem a barra receber a saida do mouse, e o :hover fica preso. */
+.clock:active {
   background-color: @surface-hover;
 }
 
@@ -135,6 +138,36 @@ label {
   color: @muted;
 }
 
+/* Bateria. O ironbar aplica cada perfil de config.corn como profile-<nome>.
+   O seletor sem label colore o icone. */
+.system .battery label {
+  min-width: 32px;
+}
+
+.system .battery.profile-warning,
+.system .battery.profile-warning label {
+  color: @warning;
+}
+
+.system .battery.profile-critical,
+.system .battery.profile-critical label {
+  color: @critical;
+}
+
+.system .battery.profile-charging,
+.system .battery.profile-charging label {
+  color: @success;
+}
+
+/* :active em vez de :hover, como no relogio: o popup prenderia o :hover. */
+.system .battery:hover {
+  background-color: transparent;
+}
+
+.system .battery:active {
+  background-color: @surface-hover;
+}
+
 /* Workspaces. .visible cobre o workspace mostrado em cada monitor,
    igual ao button.active do waybar. .focused so vale no monitor em foco. */
 .workspaces {
@@ -177,6 +210,83 @@ popover contents {
 
 .popup {
   padding: 12px;
+}
+
+/* Calendario. As regras globais de label apagam o destaque do tema GTK,
+   entao .today, .other-month e :selected precisam ser definidos aqui. */
+.popup-clock {
+  padding: 14px;
+}
+
+.popup-clock .calendar-clock {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.popup-clock calendar {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+.popup-clock calendar > header {
+  background-color: transparent;
+  border: none;
+  margin-bottom: 8px;
+}
+
+.popup-clock calendar > header label,
+.popup-clock calendar > header stack {
+  font-size: 15px;
+}
+
+.popup-clock calendar > header button {
+  background-color: transparent;
+  border-radius: 4px;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  color: @muted;
+}
+
+.popup-clock calendar > header button:hover {
+  background-color: @surface-hover;
+  color: @text-strong;
+}
+
+.popup-clock calendar > grid > label {
+  border-radius: 4px;
+  min-width: 32px;
+  min-height: 28px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.popup-clock calendar > grid > label.day-number:hover {
+  background-color: @surface-hover;
+}
+
+.popup-clock calendar > grid > label.day-name {
+  color: @muted;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.popup-clock calendar > grid > label.other-month {
+  color: alpha(@muted, 0.35);
+}
+
+.popup-clock calendar > grid > label:selected {
+  background-color: @surface-hover;
+  color: @text-strong;
+}
+
+.popup-clock calendar > grid > label.today,
+.popup-clock calendar > grid > label.today:hover {
+  background-color: @active;
+  color: @bg;
+  font-weight: 700;
 }
 
 tooltip {

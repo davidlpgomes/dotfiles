@@ -42,7 +42,18 @@ render
 
 # Ironbar kills only this process on reload. --pdeathsig stops gdbus with it,
 # otherwise each reload would leave one gdbus running.
-while read -r _; do
+while true; do
+    read -r -t 5 _
+    status=$?
+
+    # A timeout is the only chance to notice that ironbar exited, because
+    # BlueZ can stay silent for hours and a write would never fail.
+    if ((status > 128)); then
+        kill -0 "$PPID" 2>/dev/null || exit 0
+        continue
+    fi
+    ((status == 0)) || exit 0
+
     # One connection sends many signals. Wait for the burst to end.
     while read -r -t 0.3 _; do :; done
     render

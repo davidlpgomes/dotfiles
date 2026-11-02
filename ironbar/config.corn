@@ -1,7 +1,7 @@
 // Blocos usados tanto na barra completa quanto na barra reduzida do DP-2.
 let {
     // anchor_to_edges = false centralizaria a barra. position tem padrao "bottom".
-    $base = { position = "top" anchor_to_edges = true height = 40 }
+    $base = { position = "top" anchor_to_edges = true height = 40 popup_autohide = true }
 
     $workspaces = { type = "workspaces" }
     $clock = { type = "clock" format = "󰥔  %A, %d %b, %H:%M" }
@@ -20,7 +20,7 @@ let {
             {
                 type = "button"
                 class = "memory"
-                label = "   {{5000:~/.config/ironbar/scripts/memory_usage.py}}"
+                label = "   {{5000:~/.config/ironbar/scripts/memory_usage.sh}}"
                 tooltip = "#memory_tooltip"
                 on_click = "!ghostty --title=terminal-float -e btop"
             }
@@ -29,6 +29,7 @@ let {
                 class = "gpu"
                 label = "󰢮  {{10000:~/.config/ironbar/scripts/gpu_usage.sh}}"
                 tooltip = "#gpu_tooltip"
+                show_if = "poll:3600000:command -v nvidia-smi"
                 on_click = "!ghostty --title=terminal-float -e watch -n 0.5 nvidia-smi"
             }
             {
@@ -110,10 +111,10 @@ let {
                 type = "button"
                 // O script imprime nada e publica #brightness. Assim o clique
                 // atualiza o rotulo na hora, sem esperar os 60s do poll.
-                label = "  #brightness{{60000:~/.config/ironbar/scripts/brightness.py}}"
+                label = "  #brightness{{60000:~/.config/ironbar/scripts/brightness.sh}}"
                 tooltip = "Brightness at #brightness%"
-                on_click = "!~/.config/ironbar/scripts/brightness.py --step up"
-                on_click_right = "~/.config/ironbar/scripts/brightness.py --step down"
+                on_click = "!~/.config/ironbar/scripts/brightness.sh --step up"
+                on_click_right = "~/.config/ironbar/scripts/brightness.sh --step down"
             }
         ]
     }
@@ -142,12 +143,31 @@ let {
                 on_click = "!ghostty --title=terminal-float -e sh -c 'sudo pacman -Syu; ~/.config/ironbar/scripts/updates.sh'"
                 on_click_right = "~/.config/ironbar/scripts/updates.sh"
             }
+            {
+                type = "battery"
+                icon_size = 18
+                format = "{percentage}"
+                // Vale o primeiro perfil que casar, do menor percentual para o
+                // maior. charging = false deixa o verde ganhar ao carregar.
+                // Cada perfil repete format, porque o padrao dele traz "%".
+                profiles = {
+                    critical.when = { percent = 10 charging = false }
+                    critical.format = "{percentage}"
+                    warning.when = { percent = 20 charging = false }
+                    warning.format = "{percentage}"
+                    charging.when = { percent = 100 charging = true }
+                    charging.format = "{percentage}"
+                }
+                show_if = "poll:3600000:ls /sys/class/power_supply/ | grep --quiet '^BAT'"
+            }
             $tray
         ]
     }
 } in {
     // Nivel superior: barra completa, vale para todo monitor nao listado em "monitors".
     ..$base
+    // Nomes fixos: os atalhos do Hyprland usam "ironbar bar <nome>".
+    name = "main"
     start = [ $hardware $workspaces ]
     center = [ $clock ]
     end = [ $audio $brightness $system ]
@@ -155,6 +175,7 @@ let {
     // Equivalente ao "output": "DP-2" do waybar.
     monitors.DP-2 = {
         ..$base
+        name = "side"
         start = [ $workspaces ]
         center = [ $clock ]
     }

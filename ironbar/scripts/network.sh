@@ -51,6 +51,8 @@ while true; do
             ssid=$(sed -n 's/^[[:space:]]*SSID: //p' <<< "$link")
             freq=$(awk '/freq:/ {print $2}' <<< "$link")
             signal=$(awk '/signal:/ {print $2}' <<< "$link")
+            # iw can print decimals, and bash arithmetic only takes integers
+            signal=${signal%.*}
 
             # Same formula as waybar: -45 dBm is 100%, and the value drops in
             # both directions because a signal that is too strong also suffers.
